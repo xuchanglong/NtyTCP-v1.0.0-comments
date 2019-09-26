@@ -53,42 +53,38 @@
  *
  */
 
-
-
-
-
 #ifndef __NTY_EPOLL_H__
 #define __NTY_EPOLL_H__
 
 #include <stdint.h>
 #include "nty_config.h"
 
-typedef enum {
+typedef enum
+{
 
-	NTY_EPOLLNONE 	= 0x0000,
-	NTY_EPOLLIN 	= 0x0001,
-	NTY_EPOLLPRI	= 0x0002,
-	NTY_EPOLLOUT	= 0x0004,
+	NTY_EPOLLNONE = 0x0000,
+	NTY_EPOLLIN = 0x0001,
+	NTY_EPOLLPRI = 0x0002,
+	NTY_EPOLLOUT = 0x0004,
 	NTY_EPOLLRDNORM = 0x0040,
 	NTY_EPOLLRDBAND = 0x0080,
 	NTY_EPOLLWRNORM = 0x0100,
 	NTY_EPOLLWRBAND = 0x0200,
-	NTY_EPOLLMSG	= 0x0400,
-	NTY_EPOLLERR	= 0x0008,
-	NTY_EPOLLHUP 	= 0x0010,
-	NTY_EPOLLRDHUP 	= 0x2000,
+	NTY_EPOLLMSG = 0x0400,
+	NTY_EPOLLERR = 0x0008,
+	NTY_EPOLLHUP = 0x0010,
+	NTY_EPOLLRDHUP = 0x2000,
 	NTY_EPOLLONESHOT = (1 << 30),
-	NTY_EPOLLET 	= (1 << 31)
+	NTY_EPOLLET = (1 << 31)
 
 } nty_epoll_type;
 
-
-typedef enum {
+typedef enum
+{
 	NTY_EPOLL_CTL_ADD = 1,
 	NTY_EPOLL_CTL_DEL = 2,
 	NTY_EPOLL_CTL_MOD = 3,
-} nty_epoll_op; 
-
+} nty_epoll_op;
 
 typedef union _nty_epoll_data {
 	void *ptr;
@@ -97,42 +93,40 @@ typedef union _nty_epoll_data {
 	uint64_t u64;
 } nty_epoll_data;
 
-typedef struct {
+typedef struct
+{
 	uint32_t events;
 	uint64_t data;
 } nty_epoll_event;
-
 
 int nty_epoll_create(int size);
 int nty_epoll_ctl(int epid, int op, int sockid, nty_epoll_event *event);
 int nty_epoll_wait(int epid, nty_epoll_event *events, int maxevents, int timeout);
 
-
 #if NTY_ENABLE_EPOLL_RB
 
-
-
-enum EPOLL_EVENTS {
-	EPOLLNONE 	= 0x0000,
-	EPOLLIN 	= 0x0001,
-	EPOLLPRI	= 0x0002,
-	EPOLLOUT	= 0x0004,
+enum EPOLL_EVENTS
+{
+	EPOLLNONE = 0x0000,
+	EPOLLIN = 0x0001,
+	EPOLLPRI = 0x0002,
+	EPOLLOUT = 0x0004,
 	EPOLLRDNORM = 0x0040,
 	EPOLLRDBAND = 0x0080,
 	EPOLLWRNORM = 0x0100,
 	EPOLLWRBAND = 0x0200,
-	EPOLLMSG	= 0x0400,
-	EPOLLERR	= 0x0008,
-	EPOLLHUP 	= 0x0010,
-	EPOLLRDHUP 	= 0x2000,
+	EPOLLMSG = 0x0400,
+	EPOLLERR = 0x0008,
+	EPOLLHUP = 0x0010,
+	EPOLLRDHUP = 0x2000,
 	EPOLLONESHOT = (1 << 30),
-	EPOLLET 	= (1 << 31)
+	EPOLLET = (1 << 31)
 
 };
 
-#define EPOLL_CTL_ADD	1
-#define EPOLL_CTL_DEL	2
-#define EPOLL_CTL_MOD	3
+#define EPOLL_CTL_ADD 1
+#define EPOLL_CTL_DEL 2
+#define EPOLL_CTL_MOD 3
 
 typedef union epoll_data {
 	void *ptr;
@@ -141,26 +135,33 @@ typedef union epoll_data {
 	uint64_t u64;
 } epoll_data_t;
 
-struct epoll_event {
+struct epoll_event
+{
 	uint32_t events;
 	epoll_data_t data;
 };
 
+/**
+ * @function	创建 epoll 对象，创建一颗空的红黑树，一个空双向链表。
+ * @paras	size	无用，> 0 即可。
+ * @return	-1	申请内存失败。
+ * 			-2	初始化互斥量和信号量失败。
+*/
 int epoll_create(int size);
+
+/**
+ * @function	向红黑树中增加/删除/修改 tcp 连接以及相关事件。
+ * @paras	epid	epoll 文件描述符，由 epoll_create 返回。
+ * 			op	对 sockid 进行的操作的集合。
+ * 			sockid	被操作的连接。
+ * 			event	
+ * @return	
+*/
 int epoll_ctl(int epid, int op, int sockid, struct epoll_event *event);
 int epoll_wait(int epid, struct epoll_event *events, int maxevents, int timeout);
 
-
 int nty_epoll_close_socket(int epid);
 
-
-
-
 #endif
 
-
-
 #endif
-
-
-
