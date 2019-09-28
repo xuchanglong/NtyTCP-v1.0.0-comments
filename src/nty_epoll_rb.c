@@ -84,6 +84,7 @@ int epoll_create(int size)
 		nty_trace_epoll("malloc failed\n");
 		return -1;
 	}
+	
 	/**
 	 * 创建 epoll 对象。
 	*/
