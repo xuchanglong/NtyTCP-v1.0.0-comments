@@ -120,7 +120,7 @@ struct epitem
 	rbn;
 	LIST_ENTRY(epitem)
 	rdlink;
-	
+
 	/**
 	 * 标记该节点是否在双向链表中。
 	*/
@@ -160,6 +160,9 @@ struct eventpoll
 	LIST_HEAD(, epitem)
 	rdlist;
 
+	/**
+	 * 双向链表中节点的数目，即：指定的事件发生的数目。
+	*/
 	int rdnum;
 
 	int waiting;
@@ -171,6 +174,10 @@ struct eventpoll
 	pthread_mutex_t cdmtx; //mutex for cond
 };
 
+/**
+ * @function	该函数是回调函数，被网卡驱动调用。
+ * 				当 client 向 server 发出三次握手、可写、可读和断开连接时，网卡会调用该函数，向双向链表中插入 epitem 。	
+*/
 int epoll_event_callback(struct eventpoll *ep, int sockid, uint32_t event);
 
 #endif
