@@ -116,8 +116,25 @@ int nty_epoll_flush_events(uint32_t cur_ts);
 
 struct epitem
 {
+    /**
+     * struct {													
+	 * struct epitem *rbe_left;
+	 * struct epitem *rbe_right;	
+	 * struct epitem *rbe_parent;
+	 * int rbe_color;	
+     * }
+     * rbn
+    */
 	RB_ENTRY(epitem)
 	rbn;
+    /**
+     * struct                                          
+	 * {                                        
+	 *  struct type *le_next;  
+	 *  struct type **le_prev;
+	 * }
+     * rdlink
+     */
 	LIST_ENTRY(epitem)
 	rdlink;
 
