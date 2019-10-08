@@ -191,6 +191,7 @@ int epoll_ctl(int epid, int op, int sockid, struct epoll_event *event)
         tmp.sockfd = sockid;
         /**
          * _epoll_rb_socket_RB_FIND(&ep->rbr, &tmp)
+         * 确定当前 eventpoll 中的红黑树中是否存在该形参指定的 socket 描述符。
         */
         struct epitem *epi = RB_FIND(_epoll_rb_socket, &ep->rbr, &tmp);
         if (epi)
@@ -204,7 +205,7 @@ int epoll_ctl(int epid, int op, int sockid, struct epoll_event *event)
         }
 
         /**
-		 * 走到这里说明原来红黑树中没有该节点。
+		 * 走到这里说明 eventpoll 中的红黑树中的所有节点均没有该 socket 描述符。
 		*/
         /**
 		 * a、创建一个 epitem 对象，该对象就是红黑树的一个节点。
@@ -216,6 +217,7 @@ int epoll_ctl(int epid, int op, int sockid, struct epoll_event *event)
             errno = -ENOMEM;
             return -1;
         }
+        
         /**
 		 * b、把 socket 保存到该节点中。
 		*/

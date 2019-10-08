@@ -151,6 +151,14 @@ struct epitem
 	struct epoll_event event;
 };
 
+/**
+ * @function	比较两个 epitem 中 socket 描述符的大小。
+ * @paras	ep1、ep2 两个 epitem 对象的首地址。
+ * @return	0	两个 socket 描述符相同。
+ * 			-1	前者的描述符小于后者。
+ * 			1	前者的描述符大于后者。
+ * @notice	该函数用于红黑树各种操作中。
+*/
 static int sockfd_cmp(struct epitem *ep1, struct epitem *ep2)
 {
 	if (ep1->sockfd < ep2->sockfd)
