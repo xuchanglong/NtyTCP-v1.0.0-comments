@@ -161,6 +161,10 @@ static int sockfd_cmp(struct epitem *ep1, struct epitem *ep2)
 }
 
 RB_HEAD(_epoll_rb_socket, epitem);
+
+/**
+ * 实例化红黑树相关操作。
+*/
 RB_GENERATE_STATIC(_epoll_rb_socket, epitem, rbn, sockfd_cmp);
 
 typedef struct _epoll_rb_socket ep_rb_tree;
