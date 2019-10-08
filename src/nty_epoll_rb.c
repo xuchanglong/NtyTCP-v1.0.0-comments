@@ -191,7 +191,7 @@ int epoll_ctl(int epid, int op, int sockid, struct epoll_event *event)
         tmp.sockfd = sockid;
         /**
          * _epoll_rb_socket_RB_FIND(&ep->rbr, &tmp)
-         * 确定当前 eventpoll 中的红黑树中是否存在该形参指定的 socket 描述符。
+         * 确定当前 eventpoll 中的红黑树节点中是否存在该形参指定的 socket 描述符。
         */
         struct epitem *epi = RB_FIND(_epoll_rb_socket, &ep->rbr, &tmp);
         if (epi)

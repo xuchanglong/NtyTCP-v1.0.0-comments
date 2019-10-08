@@ -154,8 +154,10 @@ int epoll_create(int size);
  * @paras	epid	epoll 文件描述符，由 epoll_create 返回。
  * 			op	对 sockid 进行的操作的集合。
  * 			sockid	被操作的连接。
- * 			event	
- * @return	
+ * 			event	保存需要监控的事件集合以及用户的其他数据。
+ * @return  0   操作成功
+ *          -1  操作失败。
+ * @notice  该函数主要完成的就是在 eventpoll 中对红黑树进行增删改的操作。
 */
 int epoll_ctl(int epid, int op, int sockid, struct epoll_event *event);
 int epoll_wait(int epid, struct epoll_event *events, int maxevents, int timeout);
