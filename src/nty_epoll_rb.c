@@ -157,11 +157,9 @@ int epoll_ctl(int epid, int op, int sockid, struct epoll_event *event)
     if (!tcp)
         return -1;
 
-    nty_trace_epoll(" epoll_ctl --> 1111111:%d, sockid:%d\n", epid, sockid);
     struct _nty_socket *epsocket = tcp->fdtable->sockfds[epid];
     //struct _nty_socket *socket = tcp->fdtable->sockfds[sockid];
 
-    //nty_trace_epoll(" epoll_ctl --> 1111111:%d, sockid:%d\n", epsocket->id, sockid);
     if (epsocket->socktype == NTY_TCP_SOCK_UNUSED)
     {
         errno = -EBADF;
@@ -224,15 +222,12 @@ int epoll_ctl(int epid, int op, int sockid, struct epoll_event *event)
         epi->sockfd = sockid;
 
         /**
-		 * c、将要操作的事件保存到该节点中。
+		 * c、将要监控的事件以及其他变量保存到该节点中。
 		*/
         memcpy(&epi->event, event, sizeof(struct epoll_event));
 
         /**
 		 * d、将这个节点插入到红黑树中。
-		 * TODO：实际上这个时候epi的rbn成员就会发挥作用，
-		 * 如果这个红黑树中有多个节点，那么RB_INSERT就会epi->rbi相应的值：
-		 * 可以参考图来理解
 		*/
         epi = RB_INSERT(_epoll_rb_socket, &ep->rbr, epi);
         assert(epi == NULL);

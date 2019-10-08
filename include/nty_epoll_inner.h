@@ -116,34 +116,38 @@ int nty_epoll_flush_events(uint32_t cur_ts);
 
 struct epitem
 {
-    /**
+	/**
      * struct {													
 	 * struct epitem *rbe_left;
 	 * struct epitem *rbe_right;	
 	 * struct epitem *rbe_parent;
 	 * int rbe_color;	
-     * }
-     * rbn
+     * } rbn
     */
-	RB_ENTRY(epitem)
-	rbn;
-    /**
+	RB_ENTRY(epitem) rbn;
+
+	/**
      * struct                                          
 	 * {                                        
 	 *  struct type *le_next;  
 	 *  struct type **le_prev;
-	 * }
-     * rdlink
+	 * } rdlink
      */
-	LIST_ENTRY(epitem)
-	rdlink;
+	LIST_ENTRY(epitem) rdlink;
 
 	/**
 	 * 标记该节点是否在双向链表中。
 	*/
 	int rdy;
 
+	/**
+	 * 该节点对应的 socket 描述符。
+	*/
 	int sockfd;
+
+	/**
+	 * 保存需要 epoll 机制需要监控的事件以及其他数据。
+	*/
 	struct epoll_event event;
 };
 
@@ -163,6 +167,13 @@ typedef struct _epoll_rb_socket ep_rb_tree;
 
 struct eventpoll
 {
+	/**
+	 * 保存红黑树根节点。
+	 * struct _epoll_rb_socket
+	 * {								
+	 * 	struct epitem *rbh_root; 
+	 * } rbr;
+	*/
 	ep_rb_tree rbr;
 	int rbcnt;
 
@@ -170,7 +181,7 @@ struct eventpoll
 	 * 双向链表的根。
 	 * struct
 	 * {
-	 * 	struct epitem *lh_first
+	 * 		struct epitem *lh_first
 	 * }
 	 * rdlist;
 	*/
