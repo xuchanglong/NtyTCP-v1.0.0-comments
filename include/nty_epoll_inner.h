@@ -175,6 +175,10 @@ struct eventpoll
 	 * } rbr;
 	*/
 	ep_rb_tree rbr;
+
+	/**
+	 * 红黑树中节点的数目，即：待监控的 socket 的数量。
+	*/
 	int rbcnt;
 
 	/**
@@ -182,11 +186,9 @@ struct eventpoll
 	 * struct
 	 * {
 	 * 		struct epitem *lh_first
-	 * }
-	 * rdlist;
+	 * } rdlist;
 	*/
-	LIST_HEAD(, epitem)
-	rdlist;
+	LIST_HEAD(, epitem) rdlist;
 
 	/**
 	 * 双向链表中节点的数目，即：指定的事件发生的数目。
