@@ -324,7 +324,6 @@ char nty_socket_use_id(unsigned char *fds, size_t idx)
 
 struct _nty_socket *nty_socket_allocate(int socktype)
 {
-
 	struct _nty_socket *s = (struct _nty_socket *)calloc(1, sizeof(struct _nty_socket));
 	if (s == NULL)
 	{

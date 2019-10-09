@@ -521,9 +521,7 @@ int epoll_event_callback(struct eventpoll *ep, int sockid, uint32_t event)
 
 static int epoll_destroy(struct eventpoll *ep)
 {
-
     //remove rdlist
-
     while (!LIST_EMPTY(&ep->rdlist))
     {
         struct epitem *epi = LIST_FIRST(&ep->rdlist);
@@ -549,7 +547,6 @@ static int epoll_destroy(struct eventpoll *ep)
 
 int nty_epoll_close_socket(int epid)
 {
-
     nty_tcp_manager *tcp = nty_get_tcp_manager();
     if (!tcp)
         return -1;
