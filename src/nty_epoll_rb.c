@@ -217,7 +217,7 @@ int epoll_ctl(int epid, int op, int sockid, struct epoll_event *event)
             errno = -ENOMEM;
             return -1;
         }
-        
+
         /**
 		 * b、把 socket 保存到该节点中。
 		*/
@@ -343,20 +343,26 @@ int epoll_wait(int epid, struct epoll_event *events, int maxevents, int timeout)
     }
 
     /**
-	 * 这个 while 用来等待一定的时间。
-	 * 在这段时间内，发生事件的TCP连接，相关的节点，
-	 * 会被操作系统扔到双向链表去，当然这个节点同时也在红黑树中。
+	 * 若双向链表中没有相关节点，说明被监控的事件还没有发生。
+     * 此时的 while 会保持循环，整个函数卡在循环中。
 	*/
     while (ep->rdnum == 0 && timeout != 0)
     {
-
+        /**
+         * 由于存在超时时间，不是永久等待。
+        */
         ep->waiting = 1;
         if (timeout > 0)
         {
-
+            /**
+             * 获取系统实时时间，即：从 1970-01-01 00:00:00 开始的时间。
+            */
             struct timespec deadline;
-
             clock_gettime(CLOCK_REALTIME, &deadline);
+
+            /**
+             * 计算超时的时间节点。
+            */
             if (timeout >= 1000)
             {
                 int sec;
@@ -386,7 +392,9 @@ int epoll_wait(int epid, struct epoll_event *events, int maxevents, int timeout)
         }
         else if (timeout < 0)
         {
-
+            /**
+             * 无超时时间，永久等待。
+            */
             int ret = pthread_cond_wait(&ep->cond, &ep->cdmtx);
             if (ret)
             {
@@ -421,6 +429,7 @@ int epoll_wait(int epid, struct epoll_event *events, int maxevents, int timeout)
 		 * b、每次都从双向链表中取一个节点。
 		*/
         struct epitem *epi = LIST_FIRST(&ep->rdlist);
+        
         /**
 		 * c、把这个节点从双向链表中删除。
 		 * 但不影响该节点依旧在红黑树中。

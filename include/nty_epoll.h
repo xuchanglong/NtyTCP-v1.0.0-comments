@@ -151,7 +151,7 @@ int epoll_create(int size);
 
 /**
  * @function	向红黑树中增加/删除/修改 tcp 连接以及相关事件。
- * @paras	epid	epoll 文件描述符，由 epoll_create 返回。
+ * @paras	epid	eventpoll 文件描述符，由 epoll_create 返回。
  * 			op	对 sockid 进行的操作的集合。
  * 			sockid	被操作的连接。
  * 			event	保存需要监控的事件集合以及用户的其他数据。
@@ -160,6 +160,17 @@ int epoll_create(int size);
  * @notice  该函数主要完成的就是在 eventpoll 中对红黑树进行增删改的操作。
 */
 int epoll_ctl(int epid, int op, int sockid, struct epoll_event *event);
+
+/**
+ * @function	从双向链表中获取最大数量为 maxevents 的 epoll_event ，并保存在 events 数据中。
+ * @paras	epid	eventpoll 文件描述符，由 epoll_create 返回。
+ * 			events	数组，保存已经发生指定的事件的 epoll_event 。
+ * 			maxevents	events 数组大小。
+ * 			timeout	超时时间，单位 ms 。
+ * @return	> 0，返回有多少个被监控的事件发生了，这些事件对应的 epoll_event 发在了 evets 数组中。
+ * 			= 0，没有被监控的事件发生，有可能超时了。
+ * 			-1，发生了错误。
+*/
 int epoll_wait(int epid, struct epoll_event *events, int maxevents, int timeout);
 
 int nty_epoll_close_socket(int epid);
