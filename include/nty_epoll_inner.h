@@ -117,11 +117,12 @@ int nty_epoll_flush_events(uint32_t cur_ts);
 struct epitem
 {
 	/**
-     * struct {													
-	 * struct epitem *rbe_left;
-	 * struct epitem *rbe_right;	
-	 * struct epitem *rbe_parent;
-	 * int rbe_color;	
+     * struct 
+	 * {													
+	 * 		struct epitem *rbe_left;
+	 * 		struct epitem *rbe_right;	
+	 * 		struct epitem *rbe_parent;
+	 * 		int rbe_color;	
      * } rbn
     */
 	RB_ENTRY(epitem) rbn;
@@ -129,8 +130,8 @@ struct epitem
 	/**
      * struct                                          
 	 * {                                        
-	 *  struct type *le_next;  
-	 *  struct type **le_prev;
+	 *  	struct type *le_next;  
+	 *  	struct type **le_prev;
 	 * } rdlink
      */
 	LIST_ENTRY(epitem) rdlink;
@@ -186,9 +187,9 @@ struct eventpoll
 	 * 		struct epitem *rbh_root; 
 	 * } rbr;
 	 * 
-	 * 红黑树的作用：
-	 * 1、保存待监控的 socket 以及其事件，供 epoll_event_callback 函数使用。
-	 * 2、由于红黑树的增删改查效率很高的特性，方便 epoll_ctl 函数操作。
+	 * 由于红黑树的增删改查效率很高，所以 epoll 通过红黑树来管理待监控的socket的信息。
+	 * 1、增、删、改：epoll_ctl() 。
+	 * 2、查：epoll_event_callback 。
 	*/
 	ep_rb_tree rbr;
 
