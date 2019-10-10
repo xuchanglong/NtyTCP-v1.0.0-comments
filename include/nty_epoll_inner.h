@@ -183,8 +183,12 @@ struct eventpoll
 	 * 保存红黑树根节点。
 	 * struct _epoll_rb_socket
 	 * {								
-	 * 	struct epitem *rbh_root; 
+	 * 		struct epitem *rbh_root; 
 	 * } rbr;
+	 * 
+	 * 红黑树的作用：
+	 * 1、保存待监控的 socket 以及其事件，供 epoll_event_callback 函数使用。
+	 * 2、由于红黑树的增删改查效率很高的特性，方便 epoll_ctl 函数操作。
 	*/
 	ep_rb_tree rbr;
 

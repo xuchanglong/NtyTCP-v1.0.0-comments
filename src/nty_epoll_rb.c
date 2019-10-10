@@ -465,8 +465,11 @@ int epoll_event_callback(struct eventpoll *ep, int sockid, uint32_t event)
 
     struct epitem tmp;
     tmp.sockfd = sockid;
+
     /**
 	 * （1）根据 socket 找到红黑树中该 socket 对应的节点。
+     * 说明网卡接收到数据之后，会调用该函数查看 epoll 中是否存在监视该 socket  要求，
+     * 若存在，则将该事件保存到 epoll 中的双向链表中。
 	*/
     struct epitem *epi = RB_FIND(_epoll_rb_socket, &ep->rbr, &tmp);
     if (!epi)
