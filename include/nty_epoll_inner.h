@@ -223,6 +223,11 @@ struct eventpoll
 /**
  * @function	该函数是回调函数，被网卡驱动调用。
  * 				当 client 向 server 发出三次握手、可写、可读和断开连接时，网卡会调用该函数，向双向链表中插入 epitem 。	
+ * @paras	ep	被操作的 epoll 对象。
+ * 			sockid	所发生的事件对应的 socket 。
+ * 			event	保存所发生的事件。
+ * @return	0	该 socket 已在双向链表中，直接将该事件添加到 epoll_event 中。
+ * 			1	该 socket 不在双向链表中，将该 socket 添加到双向链表中。
 */
 int epoll_event_callback(struct eventpoll *ep, int sockid, uint32_t event);
 
