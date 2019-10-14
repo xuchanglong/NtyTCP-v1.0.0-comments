@@ -204,6 +204,8 @@ struct eventpoll
 	 * {
 	 * 		struct epitem *lh_first
 	 * } rdlist;
+	 * 增：epoll_event_callback
+	 * 删：epoll_wait
 	*/
 	LIST_HEAD(, epitem) rdlist;
 
