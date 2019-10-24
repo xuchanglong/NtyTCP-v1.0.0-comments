@@ -122,8 +122,19 @@ struct _nty_socket
 
 struct _nty_socket_table
 {
+    /**
+     * socket 描述符的值所能达到的最大值。
+    */
     size_t max_fds;
+
+    /**
+     * 当前 socket 描述符的值。
+    */
     int cur_idx;
+
+    /**
+     * 存储 socket 信息的数组。
+    */
     struct _nty_socket **sockfds;
     unsigned char *open_fds;
     pthread_spinlock_t lock;
