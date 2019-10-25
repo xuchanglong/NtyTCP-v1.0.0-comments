@@ -119,14 +119,20 @@ struct _nty_socket
     uint32_t opts;
     struct sockaddr_in s_addr;
 
+    /**
+     * 表示当前 socket 的应用领域。
+    */
     union {
         struct _nty_tcp_stream *stream;
         struct _nty_tcp_listener *listener;
+        /**
+         * epoll 领域。
+        */
         void *ep;
     };
 
     /**
-     * 该 socket 所在的 socket table 的地址。
+     * 该 socket 所在的 socket 列表的地址。
     */
     struct _nty_socket_table *socktable;
 };

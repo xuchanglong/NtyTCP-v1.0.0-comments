@@ -150,7 +150,7 @@ int epoll_create(int size)
     tcp->ep = (void *)ep;
     
     /**
-     * 将 epoll 信息挂载到 socket 信息中。
+     * 将 epoll 对象挂载到 socket 对象中。
     */
     epsocket->ep = (void *)ep;
 
@@ -181,6 +181,9 @@ int epoll_ctl(int epid, int op, int sockid, struct epoll_event *event)
 
     nty_trace_epoll(" epoll_ctl --> eventpoll\n");
 
+    /**
+     * 返回 epoll 对象。
+    */
     struct eventpoll *ep = (struct eventpoll *)epsocket->ep;
     if (!ep || (!event && op != EPOLL_CTL_DEL))
     {
@@ -188,7 +191,8 @@ int epoll_ctl(int epid, int op, int sockid, struct epoll_event *event)
         return -1;
     }
     /**
-	 * （1）在 sockid 上添加关联的事件。 
+	 * （1）在 epoll 上添加指定 socket 的事件。 
+     * 使 epoll 对指定的 socket 的事件进行监控。
 	*/
     if (op == EPOLL_CTL_ADD)
     {
