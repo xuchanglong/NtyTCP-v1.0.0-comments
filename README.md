@@ -19,11 +19,11 @@ NtyTCP-v1.0.0-comments
 　　感谢王博靖前辈的开源精神，让我对epoll实现原理有了深刻的理解，在这里对他表示非常的感谢！
 ### 一、目录介绍
 （后期补充）
-### 一、整体框架
+### 二、整体框架
 （后期补充）
 ### 三、更细日志
 #### 1、2019-10-25
-　　截至到今天，已完成对 epoll_create()、epoll_ctl()、epoll_wait()、epoll_event_callback()、epoll_destroy()等接口函数的初步注释，具体内容如下：
+　　截至到今天，初步完成的注释如下：
    * epoll_create()  
 　　申请 _nty_socket 的详细过程、红黑树和双向链表初始化。
    * epoll_ctl()  
