@@ -144,7 +144,7 @@ struct epoll_event
 /**
  * @function	创建 epoll 对象，创建一颗空的红黑树，一个空双向链表。
  * @paras	size	无用，> 0 即可。
- * @ret	>0	socket ID 。
+ * @ret	>0	socket 描述符的值 。
  * 		-1	申请内存失败。
  * 		-2	初始化互斥量和信号量失败。
 */

@@ -78,6 +78,9 @@ int epoll_create(int size)
     if (!tcp)
         return -1;
 
+    /**
+     * 申请 socket 。
+    */
     struct _nty_socket *epsocket = nty_socket_allocate(NTY_TCP_SOCK_EPOLL);
     if (epsocket == NULL)
     {
@@ -145,6 +148,10 @@ int epoll_create(int size)
     }
 
     tcp->ep = (void *)ep;
+    
+    /**
+     * 将 epoll 信息挂载到 socket 信息中。
+    */
     epsocket->ep = (void *)ep;
 
     return epsocket->id;

@@ -106,7 +106,14 @@ nty_socket_map *nty_get_socket(int sockid);
 
 struct _nty_socket
 {
+    /**
+     * socket 描述符的值。
+    */
     int id;
+
+    /**
+     * socket 类型。
+    */
     int socktype;
 
     uint32_t opts;
@@ -117,6 +124,10 @@ struct _nty_socket
         struct _nty_tcp_listener *listener;
         void *ep;
     };
+
+    /**
+     * 该 socket 所在的 socket table 的地址。
+    */
     struct _nty_socket_table *socktable;
 };
 
@@ -129,7 +140,7 @@ struct _nty_socket_table
     size_t max_fds;
 
     /**
-     * 当前 socket 描述符的值。
+     * 当前 socket 描述符所在的数组的位置。
     */
     int cur_idx;
 
@@ -152,6 +163,8 @@ struct _nty_socket_table
 
 /**
  * @function    根据 socket 类型，创建 _nty_socket 。
+ *              分配 socket 描述符的值。
+ *              其他变量进行初始化。
  * @paras   socktype    指定的 socket 的类型。
  * @ret 非nullptr   创建成功。
  *      nullptr 创建失败。

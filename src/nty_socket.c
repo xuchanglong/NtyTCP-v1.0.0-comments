@@ -273,10 +273,10 @@ struct _nty_socket_table *nty_socket_init_fdtable(void)
 /**
  * @function	搜索可用的 socket ID 。
  * @paras	fds	用于记录所有的 socket 使用与否的数组。
- * 			start	开始搜索的位置。
+ * 			start	开始搜索的数组中的位置。
  * 			max_fds	记录所有 socket 使用与否的数组的大小。
  * @ret	> 0	下一个可用的 socket 的ID。
- * 		-1		
+ * 		-1	socket 描述符已经耗尽。		
 */
 int nty_socket_find_id(unsigned char *fds, int start, size_t max_fds)
 {
@@ -326,11 +326,22 @@ char nty_socket_unuse_id(unsigned char *fds, size_t idx)
 	return fds[i];
 }
 
+/**
+ * @function	根据当前 socket 描述符的值来计算下一个可用的 socket 描述符所在的数组的位置。
+ * @paras	idx	当前正在使用的 socket 描述符的值。
+ * @ret	返回下一个可用的 socket 描述符所在的数组的位置。
+*/
 int nty_socket_set_start(size_t idx)
 {
 	return idx / NTY_BITS_PER_BYTE;
 }
 
+/**
+ * @function	将指定的 socket 已使用的状态写入 open_fds 中。
+ * @paras	fds	socket table 中的 open_fds。
+ * 			idx	socket 描述符的值。
+ * @ret	指定的 socket 在 open_fds 中的值。
+*/
 char nty_socket_use_id(unsigned char *fds, size_t idx)
 {
 
@@ -356,6 +367,9 @@ struct _nty_socket *nty_socket_allocate(int socktype)
 		return NULL;
 	}
 
+	/**
+	 * 提取 socket 列表信息。
+	*/
 	struct _nty_socket_table *sock_table = nty_socket_get_fdtable();
 
 	pthread_spin_lock(&sock_table->lock);
@@ -371,6 +385,9 @@ struct _nty_socket *nty_socket_allocate(int socktype)
 		return NULL;
 	}
 
+	/**
+	 * 返回下一个可用的 socket 描述符所在的数组的位置。
+	*/
 	sock_table->cur_idx = nty_socket_set_start(s->id);
 	char byte = nty_socket_use_id(sock_table->open_fds, s->id);
 
