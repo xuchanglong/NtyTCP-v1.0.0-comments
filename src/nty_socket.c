@@ -195,7 +195,10 @@ struct _nty_socket_table *nty_socket_allocate_fdtable(void)
 		return NULL;
 	}
 #endif
-
+	/**
+	 * 计算共需要多少个单位来保存这些 socket 描述符。
+	 * 一般用字节来表示 1 个单位。
+	*/
 	sock_table->max_fds = (NTY_SOCKFD_NR % NTY_BITS_PER_BYTE ? NTY_SOCKFD_NR / NTY_BITS_PER_BYTE + 1 : NTY_SOCKFD_NR / NTY_BITS_PER_BYTE);
 
 	sock_table->open_fds = (unsigned char *)calloc(sock_table->max_fds, sizeof(unsigned char));
@@ -267,6 +270,14 @@ struct _nty_socket_table *nty_socket_init_fdtable(void)
 	return nty_socket_allocate_fdtable();
 }
 
+/**
+ * @function	搜索可用的 socket ID 。
+ * @paras	fds	用于记录所有的 socket 使用与否的数组。
+ * 			start	开始搜索的位置。
+ * 			max_fds	记录所有 socket 使用与否的数组的大小。
+ * @ret	> 0	下一个可用的 socket 的ID。
+ * 		-1		
+*/
 int nty_socket_find_id(unsigned char *fds, int start, size_t max_fds)
 {
 
@@ -275,14 +286,25 @@ int nty_socket_find_id(unsigned char *fds, int start, size_t max_fds)
 	{
 		if (fds[i] != 0xFF)
 		{
+			/**
+			 * 该字节没有被填满。
+			*/
 			break;
 		}
 	}
+	/**
+	 * socket 描述符已用尽。
+	*/
 	if (i == max_fds)
 		return -1;
 
 	int j = 0;
 	char byte = fds[i];
+
+	/**
+	 * 0011 1111
+	 * 找到从右向左，找到第1个为0的位置。
+	*/
 	while (byte % 2)
 	{
 		byte /= 2;
@@ -324,6 +346,9 @@ char nty_socket_use_id(unsigned char *fds, size_t idx)
 
 struct _nty_socket *nty_socket_allocate(int socktype)
 {
+	/**
+	 * 申请 _nty_socket 的内存。
+	*/
 	struct _nty_socket *s = (struct _nty_socket *)calloc(1, sizeof(struct _nty_socket));
 	if (s == NULL)
 	{
@@ -335,6 +360,9 @@ struct _nty_socket *nty_socket_allocate(int socktype)
 
 	pthread_spin_lock(&sock_table->lock);
 
+	/**
+	 * 从 socket 列表中查找可用的 socket 描述符的值。
+	*/
 	s->id = nty_socket_find_id(sock_table->open_fds, sock_table->cur_idx, sock_table->max_fds);
 	if (s->id == -1)
 	{

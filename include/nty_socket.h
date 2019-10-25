@@ -123,7 +123,8 @@ struct _nty_socket
 struct _nty_socket_table
 {
     /**
-     * socket 描述符的值所能达到的最大值。
+     * 保存所有的 socket 描述符所需要的字节数量，
+     * 即：open_fds 数组的大小。
     */
     size_t max_fds;
 
@@ -133,13 +134,28 @@ struct _nty_socket_table
     int cur_idx;
 
     /**
-     * 存储 socket 信息的数组。
+     * 存储 _nty_socket 的数组。
     */
     struct _nty_socket **sockfds;
+
+    /**
+     * 用于记录所有的 socket 使用与否的数组。
+     * 用 bit 表示 socket 使用与否。
+    */
     unsigned char *open_fds;
+
+    /**
+     * 保证对 _nty_socket_table 操作同步的自旋锁。
+    */
     pthread_spinlock_t lock;
 };
 
+/**
+ * @function    根据 socket 类型，创建 _nty_socket 。
+ * @paras   socktype    指定的 socket 的类型。
+ * @ret 非nullptr   创建成功。
+ *      nullptr 创建失败。
+*/
 struct _nty_socket *nty_socket_allocate(int socktype);
 
 void nty_socket_free(int sockid);

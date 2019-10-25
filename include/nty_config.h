@@ -73,6 +73,10 @@
 #define NTY_ENABLE_SOCKET_C10M 1
 #define NTY_ENABLE_POSIX_API 1
 
+/**
+ * 每个 socket table 中 socket 描述符的最大数量。
+ * 将来这些 socket 描述符会转换为 bit 来表示。
+*/
 #define NTY_SOCKFD_NR (1024 * 1024)
 
 /**

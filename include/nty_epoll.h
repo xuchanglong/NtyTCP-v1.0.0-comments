@@ -144,8 +144,9 @@ struct epoll_event
 /**
  * @function	创建 epoll 对象，创建一颗空的红黑树，一个空双向链表。
  * @paras	size	无用，> 0 即可。
- * @return	-1	申请内存失败。
- * 			-2	初始化互斥量和信号量失败。
+ * @ret	>0	socket ID 。
+ * 		-1	申请内存失败。
+ * 		-2	初始化互斥量和信号量失败。
 */
 int epoll_create(int size);
 
@@ -155,8 +156,8 @@ int epoll_create(int size);
  * 			op	对 sockid 进行的操作的集合。
  * 			sockid	被操作的连接。
  * 			event	保存需要监控的事件集合以及用户的其他数据。
- * @return  0   操作成功
- *          -1  操作失败。
+ * @ret  0   操作成功
+ *       -1  操作失败。
  * @notice  该函数主要完成的就是在 eventpoll 中对红黑树进行增删改的操作。
 */
 int epoll_ctl(int epid, int op, int sockid, struct epoll_event *event);
@@ -167,9 +168,9 @@ int epoll_ctl(int epid, int op, int sockid, struct epoll_event *event);
  * 			events	数组，保存已经发生指定的事件的 epoll_event 。
  * 			maxevents	events 数组大小。
  * 			timeout	超时时间，单位 ms 。
- * @return	> 0，返回有多少个被监控的事件发生了，这些事件对应的 epoll_event 发在了 evets 数组中。
- * 			= 0，没有被监控的事件发生，有可能超时了。
- * 			-1，发生了错误。
+ * @ret	> 0	返回有多少个被监控的事件发生了，这些事件对应的 epoll_event 发在了 evets 数组中。
+ * 		= 0	没有被监控的事件发生，有可能超时了。
+ * 		-1	发生了错误。
 */
 int epoll_wait(int epid, struct epoll_event *events, int maxevents, int timeout);
 

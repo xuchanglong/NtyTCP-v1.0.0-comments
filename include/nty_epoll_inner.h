@@ -155,9 +155,9 @@ struct epitem
 /**
  * @function	比较两个 epitem 中 socket 描述符的大小。
  * @paras	ep1、ep2 两个 epitem 对象的首地址。
- * @return	0	两个 socket 描述符相同。
- * 			-1	前者的描述符小于后者。
- * 			1	前者的描述符大于后者。
+ * @ret	0	两个 socket 描述符相同。
+ * 		-1	前者的描述符小于后者。
+ * 		1	前者的描述符大于后者。
  * @notice	该函数用于红黑树各种操作中。
 */
 static int sockfd_cmp(struct epitem *ep1, struct epitem *ep2)
@@ -229,8 +229,8 @@ struct eventpoll
  * @paras	ep	被操作的 epoll 对象。
  * 			sockid	所发生的事件对应的 socket 。
  * 			event	保存所发生的事件。
- * @return	0	该 socket 已在双向链表中，直接将该事件添加到 epoll_event 中。
- * 			1	该 socket 不在双向链表中，将该 socket 添加到双向链表中。
+ * @ret	0	该 socket 已在双向链表中，直接将该事件添加到 epoll_event 中。
+ * 		1	该 socket 不在双向链表中，将该 socket 添加到双向链表中。
 */
 int epoll_event_callback(struct eventpoll *ep, int sockid, uint32_t event);
 
