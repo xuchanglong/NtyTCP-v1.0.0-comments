@@ -148,7 +148,7 @@ int epoll_create(int size)
     }
 
     tcp->ep = (void *)ep;
-    
+
     /**
      * 将 epoll 对象挂载到 socket 对象中。
     */
@@ -440,7 +440,7 @@ int epoll_wait(int epid, struct epoll_event *events, int maxevents, int timeout)
 		 * b、每次都从双向链表中取一个节点。
 		*/
         struct epitem *epi = LIST_FIRST(&ep->rdlist);
-        
+
         /**
 		 * c、把这个节点从双向链表中删除。
 		 * 但不影响该节点依旧在红黑树中。
