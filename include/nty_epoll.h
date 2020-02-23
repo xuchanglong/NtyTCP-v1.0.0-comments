@@ -59,6 +59,7 @@
 #include <stdint.h>
 #include "nty_config.h"
 
+// epoll 事件类型
 typedef enum
 {
 
